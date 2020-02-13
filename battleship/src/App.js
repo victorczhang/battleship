@@ -4,22 +4,22 @@ import Grid from './Grid';
 // import OpponentGrid from './OpponentGrid'
 
 class App extends Component {
-  constructor() {
-    super()
-    this.state = {
-      rotate: false,
-      active: false,
-    }
-    // this.handleClick = this.handleClick.bind(this)
-  }
+  // constructor() {
+  //   super()
+  //   this.state = {
+  //     rotate: false,
+  //     active: false,
+  //   }
+  //   // this.handleClick = this.handleClick.bind(this)
+  // }
 
-  handleChange = () => {
-    this.setState (
-      {
-        rotate: !this.state.rotate
-      }
-    )
-  }
+  // handleChange = () => {
+  //   this.setState (
+  //     {
+  //       rotate: !this.state.rotate
+  //     }
+  //   )
+  // }
 
   render() {
     return (
