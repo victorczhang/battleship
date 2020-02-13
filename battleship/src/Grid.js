@@ -10,37 +10,28 @@ class Grid extends Component {
             ['', '', '', '', '', '', '', '', '', ''],
             ['', '', '', '', '', '', '', '', '', ''],
             ['', '', '', '', '', '', '', '', '', ''],
-            ['', '', 'X', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', '', '', ''],
             ['', '', '', '', '', '', '', '', '', ''],
             ['', '', '', '', '', '', '', '', '', ''],
             ['', '', '', '', '', '', '', '', '', ''],
             ['', '', '', '', '', '', '', '', '', ''],
         ],
-        ships: [
-            Ship('Carrier', 5),
-            Ship('Battleship', 4),
-            Ship('Cruiser', 3),
-            Ship('Submarine', 3),
-            Ship('Destroyer', 2)
-        ]
+        // ships: [
+        //     Ship('Carrier', 5),
+        //     Ship('Battleship', 4),
+        //     Ship('Cruiser', 3),
+        //     Ship('Submarine', 3),
+        //     Ship('Destroyer', 2)
+        //     ],
         }
     }
 
     handleClick = (e) => {
-        const board = this.state.board.slice()
-        // if (board[e.target.parentElement.id][e.target.id] === 'X') {
-        //     board[e.target.parentElement.id][e.target.id] = 'H'
-        // } else {
-        //     board[e.target.parentElement.id][e.target.id] = 'O'
-        // }
-        board[e.target.parentElement.id][e.target.id] = 'O'
-        this.setState = ({
-            board: board,
-        })
-        // console.log('Test')
-        console.log(this.state.board)
-        // console.log(e.target)
-        // console.log(e.target.parentElement)
+        const updatedBoard = this.state.board
+        updatedBoard[e.target.parentElement.id][e.target.id] = 'O'
+        this.setState = (
+            {board: updatedBoard}
+        )
     }
 
     // receiveAttack = (xcoord, ycoord) => {
@@ -53,12 +44,21 @@ class Grid extends Component {
     // }
 
     render() {
-        let grid = this.state.board.map((row, index) => {
+        const board = this.state.board
+        const grid = board.map((row, index) => {
             return (
-                <tr id={index} key={index}>
+                <tr 
+                id={index} 
+                key={index}>
                     {row.map((item, index) => {
                         return (
-                            <td className='emptyCell' id={index} key={index} onClick={this.handleClick}>{item}</td>
+                            <td 
+                            className='emptyCell' 
+                            id={index} 
+                            key={index} 
+                            onClick={this.handleClick}>
+                                {item}
+                            </td>
                         )}
                     )}
                 </tr>
@@ -74,18 +74,18 @@ class Grid extends Component {
     }
 }
 
-const Ship = (name, length) => {
-    const getName = () => name
-    const getLength = () => length
-    // const hit = (position) => {
-    //   // hit at position
-    // const isSunk = (length) => {
-      // let length = length - 1
-      // if (length = 0) {
-        // console.log('Sunk!')
-      // }
-    // }
-    return {getName, getLength}
-}
+// const Ship = (name, length) => {
+//     const getName = () => name
+//     const getLength = () => length
+//     // const hit = (position) => {
+//     //   // hit at position
+//     // const isSunk = (length) => {
+//       // let length = length - 1
+//       // if (length = 0) {
+//         // console.log('Sunk!')
+//       // }
+//     // }
+//     return {getName, getLength}
+// }
 
 export default Grid
