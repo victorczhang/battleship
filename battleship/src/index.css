@@ -20,11 +20,11 @@ td {
   font-size: 12px;
 }
 
-/* td:hover {
+td:hover {
   background: lightblue;
 }
 
 table {
   table-layout: fixed;
   border-collapse: collapse;
-} */
+}

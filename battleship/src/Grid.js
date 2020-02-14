@@ -21,11 +21,7 @@ class Grid extends Component {
       }
 
       handleClick = (e) => {
-        const updatedBoard = this.state.board
-        console.log('Test')
-        console.log(e.target)
-        console.log(e.target.parentElement)
-
+        const updatedBoard = this.state.board.slice()
         if (updatedBoard[e.target.parentElement.id][e.target.id] === 'X') {
             updatedBoard[e.target.parentElement.id][e.target.id] = 'H'
         } else {
@@ -34,6 +30,10 @@ class Grid extends Component {
         this.setState(
             { board: updatedBoard }
         )
+      }
+
+      placeShips = (ship, xcoord, ycoord) => {
+        //   ship.getLength
       }
     
       render() {
