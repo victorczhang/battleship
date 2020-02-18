@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import './App.css';
 import Grid from './Grid';
+import OpponentGrid from './OpponentGrid';
 // import OpponentGrid from './OpponentGrid'
 
 class App extends Component {
@@ -23,8 +24,9 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div id='game'>
         <Grid />
+        <OpponentGrid />
       </div>
     );
   }
