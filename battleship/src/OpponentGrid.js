@@ -60,6 +60,15 @@ class OpponentGrid extends Component {
         )
     }
 
+    isArrayInArray = (source, search) => {
+        for (var i = 0, len = source.length; i < len; i++) {
+            if (source[i][0] === search[0] && source[i][1] === search[1]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     placeShips = () => {
         // Logic to place boats randomly below
 
@@ -69,45 +78,62 @@ class OpponentGrid extends Component {
         // 3. If checks above pass then place boat
 
         let board = this.state.board.slice()
-        // let arrayPosition = []
+        let placedPosition = []
+        // let nextPosition = []
         let i
         for (i = 0; i < this.state.ships.length; i++) {
             // First randomly select coordinates for where the boat will start
             let xcoord = Math.floor(Math.random() * 10)
             let ycoord = Math.floor(Math.random() * 10)
 
-            // Get array where boats will be
-            let placedPosition = []
+            // Get positiions in array where boats will be
+            // let placedPosition = []
             let j
             for (j = 0; j < this.state.ships[i].getLength(); j++) {
-                // Logic check below, check if the coordinates are blank or if they have a ship already
-                placedPosition.push(board[xcoord][ycoord + j])
-                // console.log(placedPosition)
-            }
+                placedPosition.push([xcoord, ycoord + j])
+                // nextPosition.splice(0, 1, (xcoord, ycoord + j))
+            
+                // let newX = placedPosition[i][0]
+                // let newY = placedPosition[i][1] 
+                // if (placedPosition[i][0] === placedPosition[0][0] && placedPosition[i][1] === placedPosition[0][1]) {
+                //     console.log('True')
+                // }
+                // let k
+                // for (k=1; k < this.state.ships[i].getLength(); k++) {
 
-            const isEmpty = (currentValue) => currentValue = '';
-            if (placedPosition.every(isEmpty)) {
-                let k
-                for (k=0; k < this.state.ships[i].getLength(); k++) {
-                    board[xcoord][ycoord + k] = this.state.ships[i].getName()
+                // console.log(this.isArrayInArray(placedPosition, [xcoord, ycoord + j + 1]))
+                // console.log(`${i} pass: ` + placedPosition)    
+
+                if (this.isArrayInArray(placedPosition, [xcoord, ycoord + j + 1])) {
+                    console.log('No boats placed, something broke')
+                    let xcoord = Math.floor(Math.random() * 10)
+                    let ycoord = Math.floor(Math.random() * 10)
+
+                    // Get positiions in array where boats will be
+                    // let placedPosition = []
+                    let j
+                    for (j = 0; j < this.state.ships[i].getLength(); j++) {
+                        placedPosition.push([xcoord, ycoord + j])
+                    }
+                } else {
+                    board[xcoord][ycoord + j] = this.state.ships[i].getName()
                 }
-                console.log('Boats Placed')
-            } else {
-                console.log('one or more boats overlap')
+                console.log(`${i} pass: ` + placedPosition)
+                console.log(this.isArrayInArray(placedPosition, [xcoord, ycoord + j + 1]))
             }
 
+            // console.log(this.isArrayInArray(placedPosition, nextPosition))
+            // console.log(nextPosition)
+
+            // console.log(`${i} pass: ` + placedPosition)
+            // console.log(placedPosition)
+
+            // Place boats below
             // let k
             // for (k=0; k < this.state.ships[i].getLength(); k++) {
-            //     // console.log(arrayPosition[k].includes())
-
-            //     // if (board[xcoord][ycoord] === '' && board[xcoord][ycoord+this.state.ships[i].getLength()] === '') {
-            //     //     board[xcoord][ycoord + k] = this.state.ships[i].getName()
-            //     // }
-
             //     board[xcoord][ycoord + k] = this.state.ships[i].getName()
             // }
 
-            
             // console.log(arrayPosition)
 
             // let randomRotate = Math.floor(Math.random() * 2)
@@ -177,7 +203,7 @@ class OpponentGrid extends Component {
             //     }
             // }
         }
-        // console.log(arrayPosition)
+        // console.log(placedPosition)
         this.setState(
             { board: board }
         )
