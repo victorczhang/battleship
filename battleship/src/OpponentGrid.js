@@ -33,6 +33,7 @@ class OpponentGrid extends Component {
 
         if (updatedBoard[e.target.parentElement.id][e.target.id] === 'Carrier') {
             this.state.ships[0].hit()
+            // this.state.ships[0].maxHealth()
             updatedBoard[e.target.parentElement.id][e.target.id] = 'HIT'
         }
         else if (updatedBoard[e.target.parentElement.id][e.target.id] === 'Battleship') {
@@ -50,40 +51,15 @@ class OpponentGrid extends Component {
         else if (updatedBoard[e.target.parentElement.id][e.target.id] === 'Destroyer') {
             this.state.ships[4].hit()
             updatedBoard[e.target.parentElement.id][e.target.id] = 'HIT'
-        }
-        else {
+        } else if (updatedBoard[e.target.parentElement.id][e.target.id] === 'HIT') {
+            console.log('already hit this spot')
+        } else {
             updatedBoard[e.target.parentElement.id][e.target.id] = 'MISS'
         }
 
         this.setState(
             { board: updatedBoard }
         )
-    }
-
-    isArrayInArray = (source, search) => {
-        for (var i = 0, len = source.length; i < len; i++) {
-            if (source[i][0] === search[0] && source[i][1] === search[1]) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    shipCheck = (placedPosition, potentialBoat, newCoords, ships, xcoord, ycoord, iteration) => {
-        let j
-        for (j = 0; j < ships[iteration].getLength(); j++) {
-            newCoords = [xcoord, ycoord + j]
-            potentialBoat.push(newCoords)
-
-            // console.log(placedPosition)
-            // console.log(potentialBoat)
-
-            // If statement checks if potential coord violates an existing coord
-            if (this.isArrayInArray(placedPosition, potentialBoat[j])) {
-                console.log('coords overlap :(')
-                this.shipCheck(placedPosition, potentialBoat, newCoords, ships, xcoord, ycoord, iteration)
-            }
-        }
     }
 
     placeShips = () => {
@@ -93,41 +69,6 @@ class OpponentGrid extends Component {
         // 1. Does the boat go off the board
         // 2. Does the boat overlap another boat
         // 3. If checks above pass then place boat
-
-
-        // let placedPosition = []
-        // let board = this.state.board.slice()
-        // let i
-        // for (i = 0; i < this.state.ships.length; i++) {
-        //     // First randomly select coordinates for where the boat will start
-        //     let xcoord = Math.floor(Math.random() * 10)
-        //     let ycoord = Math.floor(Math.random() * 10)
-
-        //     // Get positions in array where a boat will be
-        //     let potentialBoat = []
-        //     let newCoords
-
-        //     // FIND A WAY TO RESTART THE LOOP HERE IF THE BOAT COORDS FAIL THE IF STATEMENT
-
-        //     let j
-        //     for (j = 0; j < this.state.ships[i].getLength(); j++) {
-        //         newCoords = [xcoord, ycoord + j]
-        //         potentialBoat.push(newCoords)
-
-        //         // console.log(placedPosition)
-        //         // console.log(potentialBoat)
-        //         // if (this.isArrayInArray(placedPosition, potentialBoat[j])) {
-        //         //     console.log('coords overlap :(')
-        //         //     // this.placeShips()
-        //         // } 
-        //         // board[xcoord][ycoord + j] = this.state.ships[i].getName()
-        //     }
-            
-        //     // Use .every() to see if every item in the potentialBoat array does NOT equal an item in the placedPosition
-            
-        //     // This is probably where I print out a boat after it is checked and passes
-        //     // console.log(potentialBoat)
-        // }
 
         const placedPosition = [];
         const board = this.state.board.slice();
@@ -172,31 +113,17 @@ class OpponentGrid extends Component {
             }
         }
         
-        // console.log(placedPosition)
-        // console.log(placedPosition[0])
-        
-        let test = this.state.board.slice()
-
-        // let b
-        // for (b = 0; b < this.state.ships[0].getLength(); b++) {
-        //     console.log(b)
-        //     let xc = placedPosition[b][0]
-        //     let yc = placedPosition[b][1]
-
-        //     test[xc][yc] = this.state.ships[0].getName()
-        // }
-
-
+        let newBoard = this.state.board.slice()
         let a
         for (a=0; a < this.state.ships.length; a++) {
-            console.log(a)
+            // console.log(a)
             let b
             for (b=0; b < this.state.ships[a].getLength(); b++) {
-                console.log(b)
+                // console.log(b)
                 let xc = placedPosition[b][0]
                 let yc = placedPosition[b][1]
 
-                test[xc][yc] =  this.state.ships[a].getName()
+                newBoard[xc][yc] =  this.state.ships[a].getName()
             }
             placedPosition.splice(0, this.state.ships[a].getLength())
         }
@@ -209,6 +136,14 @@ class OpponentGrid extends Component {
     componentDidMount() {
         this.placeShips()
     }
+
+    // test = () => {
+    //     if (this.props.player2 === false) {
+    //         // console.log('bowser is a good pupper')
+    //         this.props.handlePlayer()
+    //     }
+    //     // console.log(this.props.player2)
+    // }
 
     render() {
         const board = this.state.board
@@ -239,14 +174,6 @@ class OpponentGrid extends Component {
                                 </td>
                             )
                         }
-                        //   return (
-                        //     <td 
-                        //     key={index}
-                        //     id={index}
-                        //     onClick={this.receiveAttack}>
-                        //         {item}
-                        //     </td>
-                        //   )
                     })}
                 </tr>
             )

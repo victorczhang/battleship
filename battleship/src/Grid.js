@@ -1,167 +1,210 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 
-class Grid extends Component {
+class OpponentGrid extends Component {
     constructor() {
         super()
         this.state = {
-          board: [
-            ['','','','','','','','','',''],
-            ['','','','','','','','','',''],
-            ['','','','','','','','','',''],
-            ['','','','','','','','','',''],
-            ['','','','','','','','','',''],
-            ['','','','','','','','','',''],
-            ['','','','','','','','','',''],
-            ['','','','','','','','','',''],
-            ['','','','','','','','','',''],
-            ['','','','','','','','','',''],
-          ],
-          ships: [
-            Ship('Carrier', 5),
-            Ship('Battleship', 4),
-            Ship('Cruiser', 3),
-            Ship('Submarine', 3),
-            Ship('Destroyer', 2)
-          ],
-          rotate: false,
-          active: false,
+            board: [
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+            ],
+            ships: [
+                Ship('Carrier', 5),
+                Ship('Battleship', 4),
+                Ship('Cruiser', 3),
+                Ship('Submarine', 3),
+                Ship('Destroyer', 2)
+            ],
+            rotate: false,
+            active: false,
+            allSunk: false,
         }
-      }
+    }
 
-      receiveAttack = (e, ship) => {
-        // let x = Ship('Carrier', 5)
-
+    receiveAttack = (xcoord, ycoord) => {
         const updatedBoard = this.state.board.slice()
-        if (updatedBoard[e.target.parentElement.id][e.target.id] === 'X') {
-            updatedBoard[e.target.parentElement.id][e.target.id] = 'HIT'
-            console.log(this.state.ships[0].hit(e.target.id))
-        } else if (updatedBoard[e.target.parentElement.id][e.target.id] === '') {
-            updatedBoard[e.target.parentElement.id][e.target.id] = 'MISS'
+
+        if (updatedBoard[xcoord][ycoord] === 'Carrier') {
+            this.state.ships[0].hit()
+            updatedBoard[xcoord][ycoord] = 'HIT'
         }
+        else if (updatedBoard[xcoord][ycoord] === 'Battleship') {
+            this.state.ships[1].hit()
+            updatedBoard[xcoord][ycoord] = 'HIT'
+        }
+        else if (updatedBoard[xcoord][ycoord] === 'Cruiser') {
+            this.state.ships[2].hit()
+            updatedBoard[xcoord][ycoord] = 'HIT'
+        }
+        else if (updatedBoard[xcoord][ycoord] === 'Submarine') {
+            this.state.ships[3].hit()
+            updatedBoard[xcoord][ycoord] = 'HIT'
+        }
+        else if (updatedBoard[xcoord][ycoord] === 'Destroyer') {
+            this.state.ships[4].hit()
+            updatedBoard[xcoord][ycoord] = 'HIT'
+        } else if (updatedBoard[xcoord][ycoord] === 'HIT') {
+            console.log('already hit this spot')
+        } else {
+            updatedBoard[xcoord][ycoord] = 'MISS'
+        }
+
         this.setState(
             { board: updatedBoard }
         )
-      }
+    }
 
-      placeShips = () => {
-        let board = this.state.board.slice()
-
+    placeShips = () => {
         // Logic to place boats randomly below
 
-        let h;
-        for (h=0; h < this.state.ships.length; h++) {
-          // let ycoord = Math.floor(Math.random() * 10)
-          let randomRotate = Math.floor(Math.random() * 2)
+        // Checks required before placing a boat:
+        // 1. Does the boat go off the board
+        // 2. Does the boat overlap another boat
+        // 3. If checks above pass then place boat
 
-          if (randomRotate === 0) {
-            let xcoord = Math.floor(Math.random() * 10)
-            let ycoord = Math.abs(Math.floor(Math.random() * 10) - this.state.ships[h].getLength())
+        const placedPosition = [];
+        const board = this.state.board.slice();
+        const validatedPositionStrings = []; // <---- Create this array
+        for (const ship of this.state.ships) {
+            const thisShipLength = ship.getLength();
+            tryShip:
+            while (true) {
+                const thisBoatPossiblePositionStrings = [];
+                // Generate ship positions until valid
+                const xcoord = Math.floor(Math.random() * 10);
+                const ycoord = Math.floor(Math.random() * 10);
+                const potentialBoat = [];
+                for (let j = 0; j < thisShipLength; j++) {
+                    // Then check to see if the below position is already in it
+                    const thisCoordinateString = `${xcoord}_${ycoord + j}`;
+                    if (validatedPositionStrings.includes(thisCoordinateString)) {
+                        // Invalid
+                        continue tryShip;
+                    } 
+                    else if (ycoord + j > 9) {
+                        // Also invalid
+                        continue tryShip
+                    }
+                    thisBoatPossiblePositionStrings.push(thisCoordinateString);
 
-            let chosenArray = []
-            let i
-            for (i=0; i < this.state.ships[h].getLength(); i++) {
-             chosenArray.push(board[xcoord][ycoord + i])
+                    // If this point is reached, then this particular coordinate is valid
+                    // do whatever you need to do:
+                    const newCoords = [xcoord, ycoord + j];
+                    potentialBoat.push(newCoords);
+                }
+                // All positions for ship are valid
+                // do something with potentialBoat here?
+                // push positions to placedPosition?
+                validatedPositionStrings.push(...thisBoatPossiblePositionStrings);
+                placedPosition.push(...potentialBoat)
+                break;
             }
-
-            if (chosenArray.includes('X')) {
-              // console.log('Boat is already here')
-
-              let xcoord = Math.floor(Math.random() * 10)
-              let ycoord = Math.abs(Math.floor(Math.random() * 10) - this.state.ships[h].getLength())
-
-              let j;
-              for (j=0; j < this.state.ships[h].getLength(); j++) {
-                board[xcoord].splice(ycoord + j, 1, 'X')
-              }
-            } else {
-              let j;
-              for (j=0; j < this.state.ships[h].getLength(); j++) {
-                board[xcoord].splice(ycoord + j, 1, 'X')
-              }
-            }
-          }
-          else {
-            let xcoord = Math.abs(Math.floor(Math.random() * 10) - this.state.ships[h].getLength())
-            let ycoord = Math.abs(Math.floor(Math.random() * 10))
-
-            let chosenArray = []
-            let i
-            for (i=0; i < this.state.ships[h].getLength(); i++) {
-             chosenArray.push(board[(xcoord + i)][ycoord])
-            }
-
-            if (chosenArray.includes('X')) {
-              // console.log('Boat is already here')
-
-              let xcoord = Math.abs(Math.floor(Math.random() * 10) - this.state.ships[h].getLength())
-              let ycoord = Math.abs(Math.floor(Math.random() * 10))
-
-              let j;
-              for (j=0; j < this.state.ships[h].getLength(); j++) {
-                board[(xcoord + j)].splice(ycoord, 1, 'X')
-              }
-            } else {
-              let j;
-              for (j=0; j < this.state.ships[h].getLength(); j++) {
-                board[(xcoord + j)].splice(ycoord, 1, 'X')
-              }
-            }
-          }
         }
-        this.setState(
-          {board: board}
-        )
-      }
+        let newBoard = this.state.board.slice()
+        let a
+        for (a=0; a < this.state.ships.length; a++) {
+            // console.log(a)
+            let b
+            for (b=0; b < this.state.ships[a].getLength(); b++) {
+                // console.log(b)
+                let xc = placedPosition[b][0]
+                let yc = placedPosition[b][1]
 
-      componentDidMount() {
+                newBoard[xc][yc] =  this.state.ships[a].getName()
+            }
+            placedPosition.splice(0, this.state.ships[a].getLength())
+        }
+
+        this.setState(
+            { board: board }
+        )
+    }
+
+    ranMove = () => {
+      const xcoord = Math.floor(Math.random() * 10);
+      const ycoord = Math.floor(Math.random() * 10);
+      this.receiveAttack(xcoord, ycoord)
+      // this.handlePlayer()
+      // console.log('Move made')
+    }
+
+
+    componentDidMount() {
         this.placeShips()
-      }
-    
-      render() {
-        const board = this.state.board
-        const grid = board.map((row, index) => {
-            return (
-              <tr id={index} key={index}>
-                {row.map((item, index) => {
-                  return (
-                    <td 
+    }
+
+    render() {
+      const board = this.state.board
+      const grid = board.map((row, index) => {
+        return (
+          <tr id={index} key={index}>
+            {row.map((item, index) => {
+              if (item === 'Carrier' || item === 'Battleship' || item === 'Cruiser' || item === 'Submarine' || item === 'Destroyer') {
+                return (
+                  <td
                     key={index}
                     id={index}
-                    // onClick={this.handleClick}>
-                    // onClick = {this.placeShips}
-                    >
-                        {item}
-                    </td>
-                  )
-                })}
-              </tr>
-            )
-          }  
+                  // onClick={this.receiveAttack}
+                  >
+                    {/* // onClick = {this.placeShips} */}
+                    {/* > */}
+                    {item}
+                  </td>
+                )
+              } else {
+                return (
+                  <td
+                    key={index}
+                    id={index}
+                  // onClick={this.receiveAttack}
+                  >
+                    {/* // onClick = {this.placeShips} */}
+                    {/* > */}
+                    {item}
+                  </td>
+                )
+              }
+            })}
+          </tr>
         )
-        return (
-          <div>
-            <table>
-              <tbody>
-                {grid}
-              </tbody>
-            </table>
-          </div>
-        );
+      }
+      )
+      return (
+        <div>
+          <table>
+            <tbody>
+              {grid}
+            </tbody>
+          </table>
+        </div>
+      );
     }
 }
 
 const Ship = (name, length) => {
-  const getName = () => name
-  const getLength = () => length
-  const hit = (position) => {
-    console.log('hit')
-    isSunk();
-  }
-  const isSunk = () => {
-    console.log('Down')
-  }
-  return { getName, getLength, hit, isSunk }
+    const getName = () => name
+    const getLength = () => length
+    let health = getLength()
+    const hit = () => {
+        health--
+        console.log(health)
+        if (health <= 0) {
+            isSunk()
+        }
+    }
+    const isSunk = () => {
+        console.log('You sank a ' + getName())
+    }
+    return { getName, getLength, hit, isSunk }
 }
 
 
-export default Grid;
+export default OpponentGrid;
