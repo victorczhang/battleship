@@ -13,9 +13,9 @@ code {
 }
 
 td {
-  border: 1px solid rgba(70, 70, 70, 0.4);
-  width: 50px;
-  height: 50px;
+  border: 1px solid rgba(70, 70, 70, 0.3);
+  width: 35px;
+  height: 35px;
   text-align: center;
   font-size: 12px;
   /* table-layout: fixed; */
@@ -28,11 +28,15 @@ td.emptyCell:hover, td.oppBoats:hover {
 table {
   table-layout: fixed;
   border-collapse: collapse;
+  opacity: .8;
 }
 
 #game {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  /* background: blue; */
+  width: 70%;
+  margin: 0 auto;
 }
 
 .myBoats {
@@ -45,9 +49,18 @@ table {
 
 .emptyCell, .oppBoats {
   background: rgb(202, 255, 252);
+  opacity: .6;
 }
 
 .hitCell {
   background: maroon;
   color: white;
+}
+
+#oppBoardHeading {
+  text-align: right;
+}
+
+.disabled {
+  pointer-events: none;
 }

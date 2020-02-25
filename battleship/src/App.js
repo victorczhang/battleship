@@ -40,6 +40,7 @@ class App extends Component {
         Ship('Submarine', 3),
         Ship('Destroyer', 2)
       ],
+      gameStart: false,
       allSunk: false,
       gameOver: false,
       winner: '',
@@ -495,7 +496,8 @@ class App extends Component {
                 >
                   {/* // onClick = {this.placeShips} */}
                   {/* > */}
-                  {/* {item} */}
+                  {item.charAt(0)}
+                  {item.charAt(1)}
                   {/* Boat */}
                 </td>
               )
@@ -588,29 +590,29 @@ class App extends Component {
       <div>
         <div className='heading'>
           <h1>Battleship</h1>
-          <h4>{this.state.gameOver ? 'Game Over' : 'No Winner Yet'}</h4>
-          <h4>{this.state.winner}</h4>
+          <h3>{this.state.gameOver ? 'Game Over' : 'No Winner Yet'}</h3>
+          <h3>{this.state.winner}</h3>
         </div>
         <div id='game'>
           {/* <div>
             <h1>Your Boats Sunk</h1>
             <p></p>
           </div> */}
-          <div>
-            <table>
+          <div id='yourBoard'>
+            <table className='disabled'>
               <tbody>
                 {grid}
               </tbody>
             </table>
-            <h2>Your Board</h2>
+            <h4>Your Board</h4>
           </div>
-          <div>
-            <table>
+          <div id='oppBoard'>
+            <table className={this.state.gameOver ? 'disabled' : 'enabled'}>
               <tbody>
                 {oppGrid}
               </tbody>
             </table>
-            <h2>Opponent Board</h2>
+            <h4 id='oppBoardHeading'>Opponent Board</h4>
           </div>
           {/* <div>
             <h1>Their Boats Sunk</h1>
@@ -633,7 +635,7 @@ const Ship = (name, length) => {
     }
   }
   const isSunk = () => {
-    // console.log('A ' + getName() + ' was sunk.')
+    console.log('A ' + getName() + ' was sunk.')
   }
   return { getName, getLength, hit, isSunk }
 }
