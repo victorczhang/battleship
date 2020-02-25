@@ -21,8 +21,8 @@ td {
   /* table-layout: fixed; */
 }
 
-td:hover {
-  background: lightblue;
+td.emptyCell:hover, td.oppBoats:hover {
+  background: lightsteelblue;
 }
 
 table {
@@ -33,4 +33,21 @@ table {
 #game {
   display: flex;
   justify-content: center;
+}
+
+.myBoats {
+  background: lightgoldenrodyellow;
+}
+
+.heading {
+  text-align: center;
+}
+
+.emptyCell, .oppBoats {
+  background: rgb(202, 255, 252);
+}
+
+.hitCell {
+  background: maroon;
+  color: white;
 }
